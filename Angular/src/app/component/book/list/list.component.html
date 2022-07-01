@@ -1,0 +1,30 @@
+<div>
+  <div *ngIf="!isShowDetails">
+    <div *ngFor="let item of bookLists">
+      <mat-card class="example-card">
+        <mat-card-title-group>
+          <mat-card-title>{{ item.title }}</mat-card-title>
+          <mat-card-subtitle>{{ item.category }}</mat-card-subtitle>
+          <img mat-card-lg-image [src]="item.image" alt="Photo of a book" />
+        </mat-card-title-group>
+        <mat-card-content>
+          {{ item.description }}
+        </mat-card-content>
+        <mat-card-actions>
+          <!-- <button mat-raised-button class="nav-details">Details</button> -->
+          <a
+            href="book-details"
+            class="nav-link"
+            routerLink="book-details"
+            (click)="OnClick(item._id)"
+            >Details</a
+          >
+        </mat-card-actions>
+      </mat-card>
+      <br />
+    </div>
+  </div>
+  <div class="container" *ngIf="isShowDetails">
+    <router-outlet></router-outlet>
+  </div>
+</div>

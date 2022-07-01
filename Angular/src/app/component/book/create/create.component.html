@@ -1,0 +1,147 @@
+<section class="vh-100">
+  <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-9 col-lg-6 col-xl-5">
+        <img
+          src="https://cdn0.iconfinder.com/data/icons/carbon-mobile-browser-2/48/Add_to_reading_list-512.png"
+          class="img-fluid"
+          alt="Sample image"
+        />
+      </div>
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+        <form
+          *ngIf="!isCreateSuccess"
+          name="form"
+          (ngSubmit)="f.form.valid && onSubmit()"
+          #f="ngForm"
+          novalidate
+        >
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input
+              type="text"
+              class="form-control"
+              name="title"
+              [(ngModel)]="form.title"
+              required
+              #title="ngModel"
+            />
+            <div
+              class="alert alert-danger"
+              role="alert"
+              *ngIf="title.errors && f.submitted"
+            >
+              Title is required!
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="image">image link</label>
+            <input
+              type="text"
+              class="form-control"
+              name="image"
+              [(ngModel)]="form.image"
+              required
+              minlength="6"
+              #image="ngModel"
+            />
+            <div
+              class="alert alert-danger"
+              role="alert"
+              *ngIf="image.errors && f.submitted"
+            >
+              Image Link is required!
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="category">category</label>
+            <input
+              type="text"
+              class="form-control"
+              name="category"
+              [(ngModel)]="form.category"
+              required
+              #category="ngModel"
+            />
+            <div
+              class="alert alert-danger"
+              role="alert"
+              *ngIf="category.errors && f.submitted"
+            >
+              Category is required!
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="quantity">quantity</label>
+            <input
+              type="text"
+              class="form-control"
+              name="quantity"
+              [(ngModel)]="form.quantity"
+              required
+              #quantity="ngModel"
+            />
+            <div
+              class="alert alert-danger"
+              role="alert"
+              *ngIf="quantity.errors && f.submitted"
+            >
+              Quantity is required!
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="price">price</label>
+            <input
+              type="text"
+              class="form-control"
+              name="price"
+              [(ngModel)]="form.price"
+              required
+              #price="ngModel"
+            />
+            <div
+              class="alert alert-danger"
+              role="alert"
+              *ngIf="price.errors && f.submitted"
+            >
+              Price is required!
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="description">description</label>
+            <input
+              type="text"
+              class="form-control"
+              name="description"
+              [(ngModel)]="form.description"
+              required
+              #description="ngModel"
+            />
+            <div
+              class="alert alert-danger"
+              role="alert"
+              *ngIf="description.errors && f.submitted"
+            >
+              Description is required!
+            </div>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary btn-block">Submit</button>
+          </div>
+          <!-- <div class="form-group">
+            <div
+              class="alert alert-danger"
+              role="alert"
+              *ngIf="f.submitted && isLoginFailed"
+            >
+              Login failed: {{ errorMessage }}
+            </div>
+          </div> -->
+        </form>
+        <div class="alert alert-success" *ngIf="isCreateSuccess">
+          Create Book Success
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

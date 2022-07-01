@@ -1,0 +1,34 @@
+<div>
+  <div>
+    <mat-card class="example-card">
+      <mat-card-title-group>
+        <mat-card-title>{{ bookDetail.title }}</mat-card-title>
+        <mat-card-subtitle>{{ bookDetail.category }}</mat-card-subtitle>
+        <mat-card-subtitle>Price: {{ bookDetail.price }} VNĐ</mat-card-subtitle>
+        <mat-card-subtitle
+          >In stock: {{ bookDetail.quantity }}</mat-card-subtitle
+        >
+        <img mat-card-lg-image [src]="bookDetail.image" alt="Photo of a book" />
+      </mat-card-title-group>
+      <mat-card-content>
+        {{ bookDetail.description }}
+      </mat-card-content>
+      <mat-card-actions>
+        <div style="display: flex; margin-bottom: 30px; width: 200px">
+          <button mat-raised-button class="nav-details" (click)="onDecrease()">
+            -
+          </button>
+          <h1 style="margin: auto">{{ amount }}</h1>
+          <button mat-raised-button class="nav-details" (click)="onIncrease()">
+            +
+          </button>
+        </div>
+
+        <button mat-raised-button class="nav-details" (click)="OnAddToCart()">
+          Add to cart
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <br />
+  </div>
+</div>
