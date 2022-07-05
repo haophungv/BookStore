@@ -1,10 +1,16 @@
 import { Document } from "mongoose";
 
-export interface Books extends Document {
+export interface BookInCarts {
   title: string;
   image: string;
   category: string;
   quantity: number;
   price: number;
   description: string;
+  amount: number;
+}
+
+export interface Carts extends Document {
+  customerId: string;
+  books: [BookInCarts];
 }

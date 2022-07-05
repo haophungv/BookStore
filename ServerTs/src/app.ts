@@ -1,9 +1,16 @@
+import { errorHandling } from "./exceptions/exception";
 import * as express from "express";
 import * as bodyParser from "body-parser";
-import { adminRouter } from "./routes/admin.routes";
-import { usersRouter } from "./routes/users.routes";
-import { booksRouter } from "./routes/books.routes";
-import { cartsRouter } from "./routes/carts.routes";
+
+import * as dotenv from "dotenv";
+dotenv.config();
+
+import {
+  adminRouter,
+  usersRouter,
+  booksRouter,
+  cartsRouter,
+} from "./routes/index";
 import * as cors from "cors";
 
 class App {
@@ -17,8 +24,9 @@ class App {
   private config(): void {
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: false }));
+
     const corsOptions = {
-      origin: ["*", "http://localhost:4200"],
+      origin: ["*", process.env.APP_ANGULAR_URL],
       credentials: true,
     };
     this.app.use(cors(corsOptions));
@@ -26,8 +34,7 @@ class App {
     this.app.use("/authentication/admin", adminRouter);
     this.app.use("/products/books", booksRouter);
     this.app.use("/products/carts", cartsRouter);
-
-    // this.app.use(express.static(__dirname + "/src"));
+    this.app.use(errorHandling);
   }
 }
 

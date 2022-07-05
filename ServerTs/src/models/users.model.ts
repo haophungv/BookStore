@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-import Users from "../interfaces/users.interfaces";
+import { Users } from "../interfaces/index";
 
 const UsersSchema: Schema = new Schema({
   name: { name: "name", type: String, require: true },

@@ -2,43 +2,34 @@ import { NextFunction, Request, Response } from "express";
 import mongoose, { Schema } from "mongoose";
 import Carts from "../models/carts.model";
 import Books from "../models/books.model";
+import {
+  InternalErrorException,
+  NotFoundException,
+} from "./../exceptions/index";
 
 const create = async (req: Request, res: Response, next: NextFunction) => {
-  const cartCreateInput = req.body;
-  // console.log(cartCreateInput);
-  // cartCreateInput.forEach(async (element) => {
-  //   const pipeline = [];
+  const dataReceive = req.body;
+  const cartCreateInput = {
+    books: dataReceive.map((item) => {
+      return {
+        bookId: item._id,
+        quantity: item.amount,
+        price: item.price,
+        totalCosts: item.price * item.amount,
+      };
+    }),
+  };
 
-  //   const match = {
-  //     _id: new mongoose.Types.ObjectId(cartCreateInput._id),
-  //   };
+  const insertResult = await Carts.create(cartCreateInput);
+  const result = await Carts.findById(insertResult._id.toHexString());
+  if (!result) {
+    // return res.status(500).json({
+    //   message: "Problem getting created user from DB",
+    // });
+    return next(new InternalErrorException({ detail: "Something went wrong" }));
+  }
 
-  //   pipeline.push({
-  //     $match: match,
-  //   });
-
-  //   pipeline.push({
-  //     $limit: 1,
-  //   });
-
-  //   let result = await Books.aggregate(pipeline).exec();
-  //   if (result.length > 0) {
-  //     console.log(result[0]);
-  //     result[0].quantity = result[0].quantity - element.amount;
-  //   }
-  //   try {
-  //     await Books.findOneAndUpdate(
-  //       {
-  //         _id: element._id,
-  //       },
-  //       result[0]
-  //     );
-  //   } catch (error) {
-  //     throw { status: 500, message: error.message };
-  //   }
-  // });
-
-  await cartCreateInput.forEach(async (element) => {
+  await dataReceive.forEach(async (element) => {
     console.log(element);
     const dataToSave = {
       quantity: element.quantity - element.amount,
@@ -46,9 +37,13 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       await Books.findOneAndUpdate({ title: element.title }, dataToSave);
     } catch (error) {
-      throw { status: 500, message: error.message };
+      // throw { status: 500, message: error.message };
+      return next(
+        new InternalErrorException({ detail: "Something went wrong" })
+      );
     }
   });
+
   return res.status(201).json({
     cart: cartCreateInput,
   });

@@ -1,6 +1,5 @@
-import { BookInCarts } from "./../interfaces/carts.interface";
 import mongoose, { Schema } from "mongoose";
-import Carts from "../interfaces/carts.interface";
+import { Carts } from "../interfaces/index";
 
 const CartsSchema: Schema = new Schema({
   customerId: { name: "customerId", type: String, require: true },

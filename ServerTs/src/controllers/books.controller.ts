@@ -1,6 +1,12 @@
+import {
+  InternalErrorException,
+  NotFoundException,
+} from "./../exceptions/index";
 import mongoose from "mongoose";
 import { NextFunction, Request, Response } from "express";
 import Books from "../models/books.model";
+import { HttpException } from "../exceptions/index";
+var HttpStatus = require("http-status-codes");
 
 const create = async (req: Request, res: Response, next: NextFunction) => {
   const bookCreateInput = req.body;
@@ -21,17 +27,28 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
 
   const bookInDb = await Books.aggregate(pipeline).exec();
   if (bookInDb.length > 0) {
-    return res.status(404).json({
-      message: "book have already exist",
-    });
+    // return res.status(404).json({
+    //   message: "book have already exist",
+    // });
+
+    return next(
+      new InternalErrorException({
+        detail: "book have already exist",
+      })
+    );
   }
 
   const insertResult = await Books.create(bookCreateInput);
   const result = await Books.findById(insertResult._id.toHexString());
   if (!result) {
-    return res.status(500).json({
-      message: "Problem getting created book from DB",
-    });
+    // return res.status(500).json({
+    //   message: "Problem getting created book from DB",
+    // });
+    return next(
+      new InternalErrorException({
+        detail: "Something went wrong when create book",
+      })
+    );
   }
 
   return res.status(201).json({
@@ -39,21 +56,23 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-const getAll = (req: Request, res: Response, next: NextFunction) => {
-  Books.find()
-    .exec()
-    .then((books) => {
-      return res.status(200).json({
-        books: books,
-        count: books.length,
-      });
-    })
-    .catch((error) => {
-      return res.status(500).json({
-        message: error.message,
-        error,
-      });
+const getAll = async (req: Request, res: Response, next: NextFunction) => {
+  const result = await Books.find().exec();
+  console.log(result);
+
+  if (result.length > 0) {
+    // next(
+    //   new HttpException(
+    //     HttpStatus.INTERNAL_SERVER_ERROR,
+    //     "something went wrong with books update"
+    //   )
+    // );
+    return res.status(200).json({
+      books: result,
+      count: result.length,
     });
+  }
+  return res.status(200);
 };
 
 const getByCategory = async (
@@ -84,9 +103,10 @@ const getByCategory = async (
     });
   }
 
-  return res.status(404).json({
-    message: "book not found",
-  });
+  // return res.status(404).json({
+  //   message: "book not found",
+  // });
+  next(new NotFoundException({ detail: "Book not found" }));
 };
 
 const getById = async (req: Request, res: Response, next: NextFunction) => {
@@ -112,9 +132,11 @@ const getById = async (req: Request, res: Response, next: NextFunction) => {
     });
   }
 
-  return res.status(404).json({
-    message: "book not found",
-  });
+  // return res.status(404).json({
+  //   message: "book not found",
+  // });
+  // throw new NotFoundException("Book not found");
+  next(new NotFoundException({ detail: "Book not found" }));
 };
 
 const update = async (req: Request, res: Response, next: NextFunction) => {
@@ -131,7 +153,13 @@ const update = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await Books.findOneAndUpdate({ title: dataReceive.title }, dataToSave);
   } catch (error) {
-    throw { status: 500, message: error.message };
+    // throw { status: 500, message: error.message };
+    next(
+      new HttpException(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "something went wrong with books update"
+      )
+    );
   }
 
   res.status(200).json({

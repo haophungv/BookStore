@@ -1,3 +1,10 @@
+import {
+  HttpException,
+  NotFoundException,
+  InternalErrorException,
+  UnauthorizedErrorException,
+} from "../exceptions/index";
+var HttpStatus = require("http-status-codes");
 import { NextFunction, Request, Response } from "express";
 import Users from "../models/users.model";
 
@@ -20,17 +27,27 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
 
   const userInDb = await Users.aggregate(pipeline).exec();
   if (userInDb.length > 0) {
-    return res.status(404).json({
-      message: "username have already exist",
-    });
+    // return res.status(404).json({
+    //   message: "username have already exist",
+    // });
+    return next(
+      new InternalErrorException({
+        detail: "username have already exist",
+      })
+    );
   }
 
   const insertResult = await Users.create(userCreateInput);
   const result = await Users.findById(insertResult._id.toHexString());
   if (!result) {
-    return res.status(500).json({
-      message: "Problem getting created user from DB",
-    });
+    // return res.status(500).json({
+    //   message: "Problem getting created user from DB",
+    // });
+    return next(
+      new InternalErrorException({
+        detail: "Problem getting created user from DB",
+      })
+    );
   }
 
   return res.status(201).json({
@@ -38,21 +55,14 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-const getAll = (req: Request, res: Response, next: NextFunction) => {
-  Users.find()
-    .exec()
-    .then((user) => {
-      return res.status(200).json({
-        user: user,
-        count: user.length,
-      });
-    })
-    .catch((error) => {
-      return res.status(500).json({
-        message: error.message,
-        error,
-      });
+const getAll = async (req: Request, res: Response, next: NextFunction) => {
+  const result = await Users.find().exec();
+  if (result.length > 0) {
+    return res.status(200).json({
+      user: result,
     });
+  }
+  return res.status(200);
 };
 
 const getByUsername = async (
@@ -83,9 +93,14 @@ const getByUsername = async (
     });
   }
 
-  return res.status(404).json({
-    message: "user not found",
-  });
+  // return res.status(404).json({
+  //   message: "user not found",
+  // });
+  return next(
+    new NotFoundException({
+      detail: "user not found",
+    })
+  );
 };
 
 const update = async (req: Request, res: Response, next: NextFunction) => {
@@ -117,7 +132,13 @@ const remove = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await Users.findOneAndDelete({ title: dataReceive.title });
   } catch (error) {
-    throw { status: 500, message: error.message };
+    // throw { status: 500, message: error.message };
+    next(
+      new HttpException(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        "something went wrong"
+      )
+    );
   }
   res.status(200).json({
     data: {
@@ -152,9 +173,14 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     });
   }
 
-  return res.status(404).json({
-    message: "wrong username or password",
-  });
+  // return res.status(404).json({
+  //   message: "wrong username or password",
+  // });
+  return next(
+    new UnauthorizedErrorException({
+      detail: "wrong username or password",
+    })
+  );
 };
 
 export default { create, getAll, getByUsername, update, remove, login };

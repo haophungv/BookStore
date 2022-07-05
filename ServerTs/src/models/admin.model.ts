@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
-import Admin from "../interfaces/admin.interfaces";
+// import Admin from "../interfaces/admin.interfaces";
+import { Admin } from "../interfaces/index";
 
 const AdminSchema: Schema = new Schema({
   name: { name: "name", type: String, require: true },

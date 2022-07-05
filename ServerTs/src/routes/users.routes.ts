@@ -1,6 +1,7 @@
 import * as express from "express";
 import { Request, Response } from "express";
 import UserController from "../controllers/users.controller";
+// import UserController from '../controllers/index';
 const router = express.Router();
 
 router.post("/", UserController.create);
