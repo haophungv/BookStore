@@ -3,7 +3,7 @@ import {
   NotFoundException,
   InternalErrorException,
   UnauthorizedErrorException,
-} from "../exceptions/index";
+} from "../exceptions";
 var HttpStatus = require("http-status-codes");
 import { NextFunction, Request, Response } from "express";
 import Users from "../models/users.model";

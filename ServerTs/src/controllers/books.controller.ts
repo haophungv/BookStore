@@ -1,7 +1,4 @@
-import {
-  InternalErrorException,
-  NotFoundException,
-} from "./../exceptions/index";
+import { InternalErrorException, NotFoundException } from "./../exceptions";
 import mongoose from "mongoose";
 import { NextFunction, Request, Response } from "express";
 import Books from "../models/books.model";
@@ -72,7 +69,12 @@ const getAll = async (req: Request, res: Response, next: NextFunction) => {
       count: result.length,
     });
   }
-  return res.status(200);
+  // return res.status(200);
+  return next(
+    new NotFoundException({
+      detail: "book not found",
+    })
+  );
 };
 
 const getByCategory = async (

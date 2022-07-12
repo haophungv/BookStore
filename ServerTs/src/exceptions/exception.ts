@@ -47,5 +47,6 @@ export const errorHandling = (
   return res.status(status).send({
     status,
     message,
+    extra: error?.extra,
   });
 };
