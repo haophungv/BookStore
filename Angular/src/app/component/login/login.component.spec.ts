@@ -25,6 +25,8 @@ describe('LoginComponent', () => {
   });
 
   it('should onSubmit function', async () => {
-    // expect(component.onSubmit()).toBeDefined();
+    spyOn(component, 'onSubmit');
+    component.onSubmit();
+    expect(component.onSubmit).toHaveBeenCalled();
   });
 });

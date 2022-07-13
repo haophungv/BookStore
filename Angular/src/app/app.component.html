@@ -11,7 +11,7 @@
       </li>
     </ul>
 
-    <ul class="navbar-nav mr-auto">
+    <ul class="navbar-nav mr-auto" style="margin-top: 7px">
       <li class="nav-item">
         <a href="/book-create" class="nav-link" routerLink="book-create"
           >Add Book</a
@@ -23,7 +23,9 @@
         >
       </li>
       <li class="nav-item">
-        <a href="/cart" class="nav-link" routerLink="cart">View Cart</a>
+        <a href="/cart" class="nav-link" routerLink="cart">
+          <app-cart-button></app-cart-button>
+        </a>
       </li>
     </ul>
 
@@ -33,12 +35,8 @@
           username
         }}</a>
       </li>
-      <!-- <li class="nav-item">
-        <a href class="nav-link" (click)="logout()">LogOut</a>
-      </li> -->
     </ul>
   </nav>
-
   <div class="container">
     <router-outlet></router-outlet>
   </div>

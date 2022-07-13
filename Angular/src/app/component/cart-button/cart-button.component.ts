@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SharedService } from 'src/app/service/shared.service';
+import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  selector: 'app-cart-button',
+  templateUrl: './cart-button.component.html',
+  styleUrls: ['./cart-button.component.css'],
 })
-export class AppComponent {
-  isLoggedIn = false;
-  username?: string;
-  title = 'Angular';
+export class CartButtonComponent implements OnInit {
+  quantity = 0;
   booksInCart = [
     {
       _id: '',
@@ -21,7 +21,8 @@ export class AppComponent {
       amount: 0,
     },
   ];
-  quantity = 0;
+
+  constructor() {}
 
   ngOnInit(): void {
     let dataOnStorage: string | null = null;

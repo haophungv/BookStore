@@ -9,7 +9,7 @@ const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
 };
 
-interface BookCreateInput {
+export interface BookCreateInput {
   title: string;
   image: string;
   category: string;
@@ -17,7 +17,7 @@ interface BookCreateInput {
   price: number;
   description: string;
 }
-interface CartCreateInput {
+export interface CartCreateInput {
   _id: string;
   title: string;
   image: string;

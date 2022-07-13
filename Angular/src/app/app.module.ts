@@ -15,6 +15,7 @@ import { ItemComponent } from './component/book/item/item.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { DetailsComponent } from './component/book/details/details.component';
 import { CartComponent } from './component/book/cart/cart.component';
+import { CartButtonComponent } from './component/cart-button/cart-button.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { CartComponent } from './component/book/cart/cart.component';
     ItemComponent,
     DetailsComponent,
     CartComponent,
+    CartButtonComponent,
   ],
   imports: [
     BrowserModule,

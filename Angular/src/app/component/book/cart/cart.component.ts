@@ -1,4 +1,3 @@
-import { CartService } from 'src/app/service/cart.service';
 import { BookService } from 'src/app/service/book.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -20,15 +19,12 @@ export class CartComponent implements OnInit {
       amount: 0,
     },
   ];
-  constructor(
-    private cartService: CartService,
-    private bookService: BookService
-  ) {}
+  constructor(private bookService: BookService) {}
 
   ngOnInit(): void {
     let dataOnStorage: string | null = null;
     dataOnStorage = localStorage.getItem('books');
-    this.booksInCart = JSON.parse(dataOnStorage ? dataOnStorage : '');
+    this.booksInCart = JSON.parse(dataOnStorage ? dataOnStorage : '[{}]');
     console.log(this.booksInCart);
   }
 
